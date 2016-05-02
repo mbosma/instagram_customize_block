@@ -1,0 +1,38 @@
+<?php
+/**
+ * Implements hook_help.
+ */
+function instagram_customize_block_help($path, $arg) {
+  $output = '';
+  switch ($path) {
+    case "admin/help#instagram_customize_block":
+      $output = '<p>'. t("This module modifies the instagram block settings to use a custom tag or user for specific pages. This allows the single tag or user block to display content other than the default user or tag identified in the block") .'</p>';
+      break;
+  }
+  return $output;
+}
+
+/**
+* Implement hook alter to change the default instagram_block settings based on aliased path.
+*/
+function instagram_customize_block_instagram_block_settings_alter(&$delta, &$values, &$config) {
+  $path = $_GET['q'];
+  $path = drupal_get_path_alias($path);
+  switch ($path) {
+    /**
+    * Tag block: change tag, size, number of photos 
+    */
+    case "schools/construction-management-technology/boilerbuilt-gallery":
+      $values['tag'] = "boilerbuilt";
+      $values['width'] = "218";
+      $values['height'] = "218";
+      $values['count'] = "20";
+      break;
+    /**
+    * User block: change number of photos
+    */
+    case "newsroom/social-media":
+      $values['count'] = "15";
+      break;
+  }
+}
